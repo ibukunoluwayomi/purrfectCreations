@@ -1,0 +1,99 @@
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% block content %}
+    {% load humanize %}
+    <div class="container-fluid container">
+        <div class="text-title mt-2 mb-5"><h2 class="display-4">Purrfect Creations Dashboard</h2><button type="button" class="btn btn-primary" onClick="refreshPage()">Click to refresh data</button></div>
+        <div class="row cell text-center m-2" id="top-row">
+            <div class="col-3">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h6 class="card-title text-primary">Total orders</h6>
+                        <h3 class="card-subtitle">{{ total_orders }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h6 class="card-title text-primary">Total orders this month</h6>
+                        <h3 class="card-subtitle">{{ total_orders_this_month }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h6 class="card-title text-primary">Number of orders in progress</h6>
+                        <h3 class="card-subtitle">{{ number_of_orders_in_progress }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h6 class="card-title text-primary">Total revenue</h6>
+                        <h3 class="card-subtitle">£{{ revenue|floatformat:2|intcomma }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="bottom-row">
+            <h2>Recent Orders</h2>
+            <table class="table table-responsive">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">order_id</th>
+                    <th scope="col">order_placed</th>
+                    <th scope="col">product_name</th>
+                    <th scope="col">price</th>
+                    <th scope="col">first_name</th>
+                    <th scope="col">last_name</th>
+                    <th scope="col">address</th>
+                    <th scope="col">email</th>
+                    <th scope="col">order_status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in recent_orders %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ order.order_id }}</td>
+                        <td>{{ order.order_placed }}</td>
+                        <td>{{ order.product_name }}</td>
+                        <td>£{{ order.price }}</td>
+                        <td>{{ order.first_name|capfirst }}</td>
+                        <td>{{ order.last_name|capfirst }}</td>
+                        <td>{{ order.address }}</td>
+                        <td>{{ order.email }}</td>
+                        {% if order.order_status == 'cancelled' %}
+                            <td class="text-danger">{{ order.order_status|capfirst }}</td>
+                        {% elif order.order_status == 'shipped' %}
+                            <td class="text-success">{{ order.order_status|capfirst }}</td>
+                        {% elif order.order_status == 'in_progress' %}
+                            <td class="text-info">In progress</td>
+                        {% else %}
+                            <td>{{ order.order_status|capfirst }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+<script>
+
+    function refreshPage() {
+        window.location.reload();
+    }
+</script>
