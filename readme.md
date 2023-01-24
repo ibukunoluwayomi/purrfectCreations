@@ -12,4 +12,4 @@ Execute commands below from within the root directory.
 
 ## To run test
 - Build the image.`docker build -t purrfectcreations .`
-- Execute test in container `docker run -t -i purrfectcreations sh -c "python -m pytest dashboard/tests.py -vv"`
+- Execute test in container `docker run -t -i --env AIRTABLE_API_KEY=<AIRTABLE_API_KEY> --env AIRTABLE_BASE_ID=<AIRTABLE_BASE_ID> --env AIRTABLE_ORDERS_TABLE_ID=<AIRTABLE_ORDERS_TABLE_ID> purrfectcreations sh -c "python -m pytest dashboard/tests.py -vv"`
